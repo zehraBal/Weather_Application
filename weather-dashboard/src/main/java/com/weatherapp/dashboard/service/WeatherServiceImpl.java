@@ -22,7 +22,7 @@ public class WeatherServiceImpl implements WeatherService {
     private final LocationService locationService;
     private final CurrentWeatherRepository currentWeatherRepository;
     private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather";
-    private static final String API_KEY = "8b86cfa5c05559d88e79b598ec36acbf";
+    private static final String API_KEY = "YOUR_API_KEY";
 
     @Override
     public CurrentWeather fetchAndSaveCurrentWeather(String city) {
