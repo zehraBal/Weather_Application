@@ -34,7 +34,7 @@ public class LocationServiceImpl implements LocationService{
     }
 
     @Override
-    public boolean existByCity(String city) {
-        return locationRepository.existByCity(city);
+    public boolean existsByCity(String city) {
+        return locationRepository.existsByCity(city);
     }
 }

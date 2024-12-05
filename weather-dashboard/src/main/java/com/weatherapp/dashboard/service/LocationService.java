@@ -12,6 +12,6 @@ public interface LocationService {
     public Location saveOrUpdateLocation(Location location);
     public Optional<Location> findByCity(String city);
     public List<Location> findByCountry(String country);
-    public boolean existByCity(String city);
+    boolean existsByCity(String city);
 
 }

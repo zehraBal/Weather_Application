@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface CurrentWeatherRepository extends JpaRepository<CurrentWeather,Long> {
     Optional<CurrentWeather> findByLocationCity(String city);
-    boolean existByLocationCity(String city);
+    boolean existsByLocationCity(String city);
 }

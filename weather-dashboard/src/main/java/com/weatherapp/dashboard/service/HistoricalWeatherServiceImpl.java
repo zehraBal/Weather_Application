@@ -1,7 +1,6 @@
 package com.weatherapp.dashboard.service;
 
 import com.weatherapp.dashboard.entity.HistoricalWeather;
-import com.weatherapp.dashboard.entity.Location;
 import com.weatherapp.dashboard.repository.HistoricalWeatherRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,13 +12,9 @@ import java.util.List;
 public class HistoricalWeatherServiceImpl implements HistoricalWeatherService{
 
     private final HistoricalWeatherRepository historicalWeatherRepository;
-    private final LocationService locationService;
 
     @Override
-    public HistoricalWeather saveHistoricalWeather(String city, LocalDate date, double temperature, int humidity, String description, double windSpeed) {
-        Location location=locationService.findByCity(city).orElseThrow(()->new RuntimeException("Location not found !"));
-
-        HistoricalWeather historicalWeather =new HistoricalWeather(location,date,temperature,humidity,description,windSpeed);
+    public HistoricalWeather saveHistoricalWeather(HistoricalWeather historicalWeather) {
         return historicalWeatherRepository.save(historicalWeather);
     }
 
