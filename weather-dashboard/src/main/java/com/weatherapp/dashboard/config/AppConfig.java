@@ -11,6 +11,7 @@ public class AppConfig {
         return new RestTemplate();
     }
 }
+
 /*
 Synchronous client to perform HTTP requests, exposing a simple, template method API over underlying HTTP client libraries such as the JDK HttpURLConnection, Apache HttpComponents, and others.
 RestTemplate offers templates for common scenarios by HTTP method, in addition to the generalized exchange and execute methods that support less frequent cases.
