@@ -27,4 +27,9 @@ public class HistoricalWeatherServiceImpl implements HistoricalWeatherService{
     public List<HistoricalWeather> getHistoricalWeather(String city, LocalDate startDate, LocalDate endDate) {
         return historicalWeatherRepository.findByLocationCityAndDateBetween(city,startDate,endDate);
     }
+
+    @Override
+    public List<HistoricalWeather> getAllHistoricalWeather() {
+        return historicalWeatherRepository.findAll();
+    }
 }

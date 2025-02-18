@@ -1,8 +1,11 @@
 package com.weatherapp.dashboard.controller;
 
+import com.weatherapp.dashboard.dto.FavoriteLocationDTO;
 import com.weatherapp.dashboard.entity.FavoriteLocation;
 import com.weatherapp.dashboard.service.FavoriteLocationService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/favorites")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class FavoriteLocationController {
     private final FavoriteLocationService service;
 
@@ -19,8 +21,11 @@ public class FavoriteLocationController {
         return  service.getAllFavorites();
     }
     @PostMapping
-    public FavoriteLocation saveFavorite(@RequestBody FavoriteLocation location){
-        return service.saveFavorite(location);
+    public ResponseEntity<String> saveFavorite(@RequestBody FavoriteLocationDTO location){
+        FavoriteLocation favoriteLocation=new FavoriteLocation();
+        favoriteLocation.setCity(location.getCity());
+        service.saveFavorite(favoriteLocation);
+        return ResponseEntity.ok(location.getCity()+" saved successfully");
     }
     @DeleteMapping("/{city}")
     public void removeFromFavorite(@PathVariable String city){

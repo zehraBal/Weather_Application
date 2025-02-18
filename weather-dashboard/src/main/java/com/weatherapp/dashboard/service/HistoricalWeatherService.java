@@ -10,5 +10,5 @@ public interface HistoricalWeatherService {
     HistoricalWeather saveHistoricalWeather(HistoricalWeather historicalWeather);
     public List<HistoricalWeather> getHistoricalWeather(String city);
     public List<HistoricalWeather> getHistoricalWeather(String city, LocalDate startDate, LocalDate endDate);
-
+    public List<HistoricalWeather> getAllHistoricalWeather();
 }

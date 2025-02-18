@@ -24,8 +24,13 @@ public class HistoricalWeatherController {
     private final LocationService locationService;
     private final HistoricalWeatherConverter converter;
 
-
     @GetMapping
+    public List<HistoricalWeatherResponse> getAllHistoricalWeather(){
+        List<HistoricalWeather> history=historicalWeatherService.getAllHistoricalWeather();
+        return converter.toListedDto(history);
+    }
+
+    @GetMapping("/searchFor")
     public List<HistoricalWeatherResponse> getHistoricalWeather(
             @RequestParam String city,
             @RequestParam(required = false) String startDate,
