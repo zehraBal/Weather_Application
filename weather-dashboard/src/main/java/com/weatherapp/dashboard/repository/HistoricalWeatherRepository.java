@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface HistoricalWeatherRepository extends JpaRepository<HistoricalWeather,Long> {
-    @Query("SELECT h FROM HistoricalWeather h WHERE LOWER(h.city)= LOWER(:city)")
+    @Query("SELECT h FROM HistoricalWeather h JOIN h.location l WHERE LOWER(l.city) = LOWER(:city) AND h.date BETWEEN :startDate AND :endDate")
     List<HistoricalWeather> findByLocationCityAndDateBetween(String city, LocalDate startDate,LocalDate endDate);
 
     List<HistoricalWeather> findByLocationCity(String city);
