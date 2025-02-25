@@ -20,5 +20,7 @@ public class FavoriteLocation {
     @Column(nullable = false,unique = true)
     private String city;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

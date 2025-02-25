@@ -1,7 +1,9 @@
 package com.weatherapp.dashboard.service;
 
 import com.weatherapp.dashboard.entity.FavoriteLocation;
+import com.weatherapp.dashboard.entity.User;
 import com.weatherapp.dashboard.repository.FavoriteLocationRepository;
+import com.weatherapp.dashboard.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,32 +12,44 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class FavoriteLocationServiceImpl implements FavoriteLocationService{
+public class FavoriteLocationServiceImpl {
 
-    private FavoriteLocationRepository favoriteLocationRepository;
+    private final FavoriteLocationRepository favoriteLocationRepository;
+    private final UserRepository userRepository;
 
-    public List<FavoriteLocation> getAllFavorites(){
-        return favoriteLocationRepository.findAll();
-
+    public List<FavoriteLocation> getFavoritesByUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        return favoriteLocationRepository.findByUser(user);
     }
 
-    public FavoriteLocation saveFavorite(FavoriteLocation location){
-        Optional<FavoriteLocation> existing=favoriteLocationRepository.findByCity(location.getCity());
-        if(existing.isPresent()){
-            throw   new RuntimeException("City already in favorites");
+    public FavoriteLocation saveFavorite(FavoriteLocation location, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        if (favoriteLocationRepository.findByCityAndUser(location.getCity(), user).isPresent()) {
+            throw new RuntimeException("City already in favorites");
         }
+
+        location.setUser(user);
         return favoriteLocationRepository.save(location);
     }
 
-    @Override
-    public Optional<FavoriteLocation> findByCity(String city) {
-    return favoriteLocationRepository.findByCity(city);
+    public Optional<FavoriteLocation> findByCityAndUser(String city, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        return favoriteLocationRepository.findByCityAndUser(city, user);
     }
 
-    @Override
-    public void removeFromFavorites (String city) {
-        if (favoriteLocationRepository.findByCity(city).isPresent()){
-            favoriteLocationRepository.deleteByCity(city);
+    public void removeFromFavorites(String city, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        Optional<FavoriteLocation> favorite = favoriteLocationRepository.findByCityAndUser(city, user);
+        if (favorite.isPresent()) {
+            favoriteLocationRepository.delete(favorite.get());
+        } else {
+            throw new RuntimeException("City not found in favorites");
         }
     }
 }

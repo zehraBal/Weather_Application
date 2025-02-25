@@ -2,9 +2,9 @@ package com.weatherapp.dashboard.controller;
 
 import com.weatherapp.dashboard.dto.FavoriteLocationDTO;
 import com.weatherapp.dashboard.entity.FavoriteLocation;
-import com.weatherapp.dashboard.service.FavoriteLocationService;
+import com.weatherapp.dashboard.service.FavoriteLocationServiceImpl;
+import com.weatherapp.dashboard.service.JWTService;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,21 +14,32 @@ import java.util.List;
 @RequestMapping("/favorites")
 @AllArgsConstructor
 public class FavoriteLocationController {
-    private final FavoriteLocationService service;
 
+    private final FavoriteLocationServiceImpl service;
+    private final JWTService jwtService;
+
+    // Kullanıcının favorilerini getir
     @GetMapping
-    public List<FavoriteLocation> getAllFavorites(){
-        return  service.getAllFavorites();
+    public ResponseEntity<List<FavoriteLocation>> getUserFavorites(@RequestHeader("Authorization") String token) {
+        String username = jwtService.extractUserName(token.substring(7));
+        return ResponseEntity.ok(service.getFavoritesByUser(username));
     }
+
+    // Favori kaydet
     @PostMapping
-    public ResponseEntity<String> saveFavorite(@RequestBody FavoriteLocationDTO location){
-        FavoriteLocation favoriteLocation=new FavoriteLocation();
+    public ResponseEntity<String> saveFavorite(@RequestHeader("Authorization") String token, @RequestBody FavoriteLocationDTO location) {
+        String username = jwtService.extractUserName(token.substring(7));
+        FavoriteLocation favoriteLocation = new FavoriteLocation();
         favoriteLocation.setCity(location.getCity());
-        service.saveFavorite(favoriteLocation);
-        return ResponseEntity.ok(location.getCity()+" saved successfully");
+        service.saveFavorite(favoriteLocation, username);
+        return ResponseEntity.ok(location.getCity() + " saved successfully");
     }
+
+    // Favoriyi sil
     @DeleteMapping("/{city}")
-    public void removeFromFavorite(@PathVariable String city){
-        service.removeFromFavorites(city);
+    public ResponseEntity<String> removeFromFavorites(@RequestHeader("Authorization") String token, @PathVariable String city) {
+        String username = jwtService.extractUserName(token.substring(7));
+        service.removeFromFavorites(city, username);
+        return ResponseEntity.ok(city + " removed from favorites");
     }
 }

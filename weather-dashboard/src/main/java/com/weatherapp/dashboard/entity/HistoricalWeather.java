@@ -17,7 +17,7 @@ public class HistoricalWeather {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name ="location_id",nullable = false)
+    @JoinColumn(name ="location_id", nullable = false)
     private Location location;
 
     @Column(nullable = false)
@@ -35,12 +35,17 @@ public class HistoricalWeather {
     @Column(name = "wind_speed", nullable = false)
     private double windSpeed;
 
-    public HistoricalWeather(Location location, LocalDate date, double temperature, int humidity, String description, double windSpeed) {
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public HistoricalWeather(Location location, LocalDate date, double temperature, int humidity, String description, double windSpeed, User user) {
         this.location = location;
         this.date = date;
         this.temperature = temperature;
         this.humidity = humidity;
         this.description = description;
         this.windSpeed = windSpeed;
+        this.user = user;
     }
 }
