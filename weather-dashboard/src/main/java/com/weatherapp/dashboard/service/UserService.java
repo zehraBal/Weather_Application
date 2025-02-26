@@ -48,4 +48,8 @@ public class UserService {
             return "fail";
         }
     }
+
+    public User findByUsername(String username) {
+        return repo.findByUsername(username).orElseThrow();
+    }
 }

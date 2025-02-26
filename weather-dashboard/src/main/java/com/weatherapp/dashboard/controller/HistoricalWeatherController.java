@@ -53,15 +53,15 @@ public class HistoricalWeatherController {
         return converter.toListedDto(historicalWeather);
     }
 
-    // Kullanıcının yaptığı hava durumu aramasını kaydet
-    @PostMapping
-    public HistoricalWeatherResponse saveUserHistoricalWeather(@RequestHeader("Authorization") String token, @RequestBody @Valid HistoricalWeatherRequest request) {
-        String username = jwtService.extractUserName(token.substring(7));
-        Location location = locationService.findByCity(request.city())
-                .orElseThrow(() -> new RuntimeException("Location not found: " + request.city()));
-
-        HistoricalWeather historicalWeather = converter.toEntity(request, location);
-        HistoricalWeather saved = historicalWeatherService.saveHistoricalWeather(historicalWeather, username);
-        return converter.toDto(saved);
-    }
+//    // Kullanıcının yaptığı hava durumu aramasını kaydet
+//    @PostMapping
+//    public HistoricalWeatherResponse saveUserHistoricalWeather(@RequestHeader("Authorization") String token, @RequestBody @Valid HistoricalWeatherRequest request) {
+//        String username = jwtService.extractUserName(token.substring(7));
+//        Location location = locationService.findByCity(request.city())
+//                .orElseThrow(() -> new RuntimeException("Location not found: " + request.city()));
+//
+//        HistoricalWeather historicalWeather = converter.toEntity(request, location);
+//        HistoricalWeather saved = historicalWeatherService.saveHistoricalWeather(historicalWeather, username);
+//        return converter.toDto(saved);
+//    }
 }

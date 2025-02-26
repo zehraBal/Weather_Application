@@ -8,17 +8,20 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/current-weather")
 @AllArgsConstructor
+@RequestMapping("/current")
 public class WeatherController {
 
     private final WeatherService weatherService;
     private final CurrentWeatherConverter converter;
 
-
     @GetMapping
-    public CurrentWeatherResponse fetchAndSaveCurrentWeather(@RequestParam String city) {
-        CurrentWeather currentWeather = weatherService.fetchAndSaveCurrentWeather(city);
+    public CurrentWeatherResponse fetchAndSaveCurrentWeather(
+            @RequestParam String city,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        CurrentWeather currentWeather = (token != null)
+                ? weatherService.fetchAndSaveCurrentWeather(city, token)
+                : weatherService.fetchAndSaveCurrentWeather(city);
         return converter.toDto(currentWeather);
     }
 }
